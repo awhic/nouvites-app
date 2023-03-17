@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^1.3.4",
     "vue": "^3.2.45"
   },
   "devDependencies": {
