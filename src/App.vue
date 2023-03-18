@@ -5,7 +5,7 @@ import NavBar from './components/NavBar.vue';
 
 <template>
   <div>
-    <NavBar />
+    <NavBar/>
   </div>
   <HelloWorld/>
 </template>
@@ -24,5 +24,9 @@ import NavBar from './components/NavBar.vue';
 
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+div {
+  margin-bottom: 50px;
 }
 </style>
