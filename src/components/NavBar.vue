@@ -6,32 +6,36 @@
             <div class="navbar__hamburger-line"></div>
             <div class="navbar__hamburger-line"></div>
         </div>
+        <SideBar :is-open="isOpen">
+            <Preferences />
+        </SideBar>
     </nav>
 </template>
   
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import Preferences from './Preferences.vue';
+import SideBar from './SideBar.vue';
 
 export default defineComponent({
-    name: 'NavBar',
+    name: "NavBar",
     props: {
         title: {
             type: String,
-            default: 'NouVites'
+            default: "NouVites"
         }
     },
     setup(props) {
         const isOpen = ref(false);
-
         const toggleHamburger = () => {
             isOpen.value = !isOpen.value;
         };
-
         return {
             isOpen,
             toggleHamburger
         };
-    }
+    },
+    components: { SideBar, Preferences }
 });
 </script>
   

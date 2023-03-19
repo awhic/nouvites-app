@@ -1,7 +1,7 @@
 <template>
   <div class="article-list" v-if="articles">
     <div class="article" v-for="(article, index) in articles" :key="index">
-      <img class="article-image" :src?="article.urlToImage"/>
+      <img class="article-image" :src="article.urlToImage"/>
       <div class="article-published">{{ article.publishedAt }}</div>
       <div class="article-title">{{ article.title }}</div>
       <div class="article-description">{{ article.description }}</div>
