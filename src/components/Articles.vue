@@ -1,7 +1,7 @@
 <template>
   <div class="article-list" v-if="articles">
     <div class="article" v-for="(article, index) in articles" :key="index">
-      <img class="article-image" :src="article.urlToImage"/>
+      <img class="article-image" src="https://thumbs.dreamstime.com/z/newspaper-headline-breaking-news-51359996.jpg"/> <!-- Temporary -->
       <div class="article-published">{{ article.publishedAt }}</div>
       <div class="article-title">{{ article.title }}</div>
       <div class="article-description">{{ article.description }}</div>
@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <button class="btn" @mouseover="isHovered = true" @mouseleave="isHovered = false" @click="handleClick">
+  <button class="btn" @click="fetchArticles">
     {{ buttonText }}
   </button>
 </template>
@@ -29,8 +29,11 @@ export default defineComponent({
       articles: [] as Article[]
     };
   },
+  mounted() {
+    this.fetchArticles();
+  },
   methods: {
-    async handleClick() {
+    async fetchArticles() {
       this.articles = await ArticleService.getArticles();
       console.log(this.articles);
     }
@@ -40,14 +43,9 @@ export default defineComponent({
 
 <style scoped>
 .btn {
-  margin-top: 20px;
   background-color: #41b883;
-  border: none;
-  border-radius: 4px;
   color: white;
-  font-size: 1rem;
-  padding: 0.75rem 1rem;
-  transition: background-color 0.2s ease-in-out;
+  margin-top: 20px;
 }
 
 .btn:hover {

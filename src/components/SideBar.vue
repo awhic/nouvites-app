@@ -29,6 +29,7 @@ export default defineComponent({
     color: #f7f7f7;
     transition: right 0.3s ease-in-out;
     margin-top: 64px;
+    box-shadow: -8px 0 14px -4px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-open {

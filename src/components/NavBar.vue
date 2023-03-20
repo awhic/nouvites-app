@@ -6,10 +6,10 @@
             <div class="navbar__hamburger-line"></div>
             <div class="navbar__hamburger-line"></div>
         </div>
-        <SideBar :is-open="isOpen">
-            <Preferences />
-        </SideBar>
     </nav>
+    <SideBar :is-open="isOpen">
+        <Preferences />
+    </SideBar>
 </template>
   
 <script lang="ts">
@@ -51,6 +51,7 @@ export default defineComponent({
     top: 0;
     left: 0;
     right: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .navbar__title {

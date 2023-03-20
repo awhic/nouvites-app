@@ -3,7 +3,7 @@ export interface Article {
         id: string | null;
         name: string;
     };
-    author: string | null;
+    author: string;
     title: string;
     description: string;
     url: string;

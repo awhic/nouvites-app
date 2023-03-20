@@ -1,5 +1,6 @@
 <template>
     <form class="preferences-form" @submit.prevent="onSubmit" autocomplete="off">
+        <h2>Preferences</h2>
         <div class="form-group">
             <label for="region-select">Select a region:</label>
             <select id="region-select" v-model="form.selectedRegion">
