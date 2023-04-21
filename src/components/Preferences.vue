@@ -1,73 +1,94 @@
 <template>
-    <form class="preferences-form" @submit.prevent="onSubmit" autocomplete="off">
-        <h2>Preferences</h2>
+    <form class="settings-form" @submit.prevent="onSubmit" autocomplete="off">
+        <h2>Settings</h2>
         <div class="form-group">
-            <label for="region-select">Select a region:</label>
-            <select id="region-select" v-model="form.selectedRegion">
-                <option value="World">World</option>
-                <option value="North America">North America</option>
-                <option value="Europe">Europe</option>
-                <option value="Asia/Pacific">Asia/Pacific</option>
+            <label for="country-select">Select a country:</label>
+            <select id="country-select" v-model="form.selectedCountry">
+                <option v-for="(country, countryCode) in englishSpeakingCountryCodes" :key="countryCode" :value="country">
+                    {{ country }}
+                </option>
             </select>
         </div>
-        <div class="form-group" v-if="form.selectedRegion === 'North America'">
-            <label for="country-select">Select country/countries:</label>
-            <div class="checkbox-group">
-                <input type="checkbox" id="us-checkbox" value="United States" v-model="form.selectedCountries">
-                <label for="us-checkbox">United States</label>
-                <input type="checkbox" id="canada-checkbox" value="Canada" v-model="form.selectedCountries">
-                <label for="canada-checkbox">Canada</label>
-            </div>
+        <div class="form-group">
+            <label for="api-key-input">API Key:</label>
+            <input type="text" id="api-key-input" v-model="form.apiKey" />
+            <p v-if="!apiKeyIsValid" class="error-message">API Key is required.</p>
         </div>
-        <button :disabled="!formIsValid" type="submit" class="submit-button">Submit</button>
+        <button :disabled="!formIsValid" type="submit" class="submit-button">Save</button>
     </form>
 </template>
   
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, computed, SetupContext } from 'vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
-    data() {
-        return {
-            form: {
-                selectedRegion: 'World',
-                selectedCountries: []
-            }
-        }
-    },
+    setup(props, { emit }: SetupContext) {
+        const store = useStore();
 
-    computed: {
-        selectedRegionIsValid () {
-            return !!this.form.selectedRegion;
-        },
+        const form = ref({
+            selectedRegion: 'World',
+            selectedCountry: 'United States',
+            apiKey: '',
+        });
 
-        selectedCountriesisValid () {
-            return (this.form.selectedRegion !== 'North America' && !!this.form.selectedRegion) ||
-                    (this.form.selectedRegion === 'North America' && this.form.selectedCountries.length > 0);
-        },
+        const englishSpeakingCountryCodes = ref({
+            AU: 'Australia',
+            CA: 'Canada',
+            GB: 'United Kingdom',
+            IE: 'Ireland',
+            IN: 'India',
+            NZ: 'New Zealand',
+            PH: 'Philippines',
+            SG: 'Singapore',
+            US: 'United States',
+            ZA: 'South Africa',
+        });
 
-        formIsValid () {
-            return this.selectedRegionIsValid && this.selectedCountriesisValid;
-        }
-    },
+        const selectedRegionIsValid = computed(() => {
+            return !!form.value.selectedRegion;
+        });
 
-    methods: {
-        onSubmit() {
-            if (this.formIsValid) {
-                if (this.form.selectedRegion !== 'North America') {
-                    this.form.selectedCountries = [];
-                }
-                console.log(this.form);
+        const selectedCountryIsValid = computed(() => {
+            return form.value.selectedRegion !== 'North America' || !!form.value.selectedCountry;
+        });
+
+        const apiKeyIsValid = computed(() => {
+            return !!form.value.apiKey;
+        });
+
+        const formIsValid = computed(() => {
+            return selectedRegionIsValid.value && selectedCountryIsValid.value && apiKeyIsValid.value;
+        });
+
+        const onSubmit = () => {
+            if (formIsValid.value) {
+                const countryKey = Object.entries(englishSpeakingCountryCodes.value).find(
+                    ([key, value]) => value === form.value.selectedCountry
+                )?.[0];
+                console.log(countryKey);
+                store.dispatch('updateSelectedCountryCode', countryKey);
+                store.dispatch('updateApiKey', form.value.apiKey);
             } else {
                 console.log('Form is Invalid');
             }
-        }
-    }
-})
+        };
+
+        return {
+            form,
+            englishSpeakingCountryCodes,
+            selectedRegionIsValid,
+            selectedCountryIsValid,
+            apiKeyIsValid,
+            formIsValid,
+            onSubmit,
+        };
+    },
+});
 </script>
   
 <style scoped>
-.preferences-form {
+.settings-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,6 +111,12 @@ export default defineComponent({
 .submit-button {
     background-color: #42b983;
     color: #fff;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin: 0;
 }
 </style>
   

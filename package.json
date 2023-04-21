@@ -11,7 +11,9 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "axios": "^1.3.4",
-    "vue": "^3.2.45"
+    "universal-cookie": "^4.0.4",
+    "vue": "^3.2.45",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
