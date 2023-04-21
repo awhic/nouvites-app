@@ -1,6 +1,9 @@
 <template>
     <nav class="navbar" :class="{ 'navbar--open': isOpen }">
-        <div class="navbar__title">{{ title }}</div>
+        <div class="navbar__title">
+            {{ title }}
+            <span class="navbar_pronunciation"> {{ pronunciation }}</span>
+        </div>
         <div class="navbar__hamburger" @click="toggleHamburger">
             <div class="navbar__hamburger-line"></div>
             <div class="navbar__hamburger-line"></div>
@@ -14,7 +17,7 @@
   
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import Preferences from './Preferences.vue';
+import Preferences from './Settings.vue';
 import SideBar from './SideBar.vue';
 
 export default defineComponent({
@@ -23,6 +26,10 @@ export default defineComponent({
         title: {
             type: String,
             default: "NouVites"
+        },
+        pronunciation: {
+            type: String,
+            default: "(noo-veets)"
         }
     },
     setup(props) {
@@ -87,6 +94,14 @@ export default defineComponent({
 
 .navbar--open .navbar__hamburger-line:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
+}
+
+.navbar_pronunciation {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    margin-left: 4px;
+    vertical-align: middle;
 }
 </style>
   

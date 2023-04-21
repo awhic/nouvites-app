@@ -38,7 +38,6 @@ export default defineComponent({
   methods: {
     async fetchArticles() {
       this.articles = await ArticleService.getArticles();
-      console.log(this.articles);
     }
   }
 });

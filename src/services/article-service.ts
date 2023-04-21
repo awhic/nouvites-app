@@ -6,13 +6,23 @@ export default class ArticleService {
   // private static apiUrl = 'http://localhost:8080/v1/articles/top-stories';
   // private static apiUrl = 'http://localhost:8080/v1/articles/test-data';
 
+  // For Springboot REST API
+  // static async getArticles(): Promise<Article[]> {
+  //   try {
+  //     const response: AxiosResponse = await axios.get(this.apiUrl);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(error);
+  //     return [];
+  //   }
+  // }
+
   static async getArticles(): Promise<Article[]> {
     const API_KEY = store.getters.getApiKey;
     const COUNTRY = store.getters.getSelectedCountryCode;
 
     const url = `https://newsapi.org/v2/top-headlines?country=${COUNTRY}&apiKey=${API_KEY}`;
 
-    console.log(COUNTRY);
     try {
       const response = await axios.get(url);
 

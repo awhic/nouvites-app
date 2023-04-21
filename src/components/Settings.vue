@@ -66,11 +66,10 @@ export default defineComponent({
                 const countryKey = Object.entries(englishSpeakingCountryCodes.value).find(
                     ([key, value]) => value === form.value.selectedCountry
                 )?.[0];
-                console.log(countryKey);
                 store.dispatch('updateSelectedCountryCode', countryKey);
                 store.dispatch('updateApiKey', form.value.apiKey);
             } else {
-                console.log('Form is Invalid');
+                console.error('Form is Invalid');
             }
         };
 
