@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import HelloWorld from './components/Articles.vue';
 import NavBar from './components/NavBar.vue';
-import Preferences from './components/Preferences.vue';
 </script>
 
 <template>

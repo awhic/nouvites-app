@@ -1,12 +1,14 @@
 <template>
-  <div class="article-list" v-if="articles">
-    <div class="article" v-for="(article, index) in articles" :key="index">
-      <img class="article-image" src="https://thumbs.dreamstime.com/z/newspaper-headline-breaking-news-51359996.jpg"/> <!-- Temporary -->
-      <div class="article-published">{{ article.publishedAt }}</div>
-      <div class="article-title">{{ article.title }}</div>
-      <div class="article-description">{{ article.description }}</div>
-      <div class="article-author">{{ article.author }}</div>
-      <a :href="article.url" target="_blank" rel="noopener noreferrer">Read</a>
+  <div class="article-list">
+    <div class="article-container" v-for="(article, index) in articles" :key="index">
+      <div class="article">
+        <img class="article-image" :src="article.urlToImage" />
+        <div class="article-published">{{ article.publishedAt }}</div>
+        <div class="article-title">{{ article.title }}</div>
+        <div class="article-description">{{ article.description }}</div>
+        <div class="article-author">{{ article.author }}</div>
+        <a :href="article.url" target="_blank" rel="noopener noreferrer">Read</a>
+      </div>
     </div>
   </div>
 
@@ -14,6 +16,7 @@
     {{ buttonText }}
   </button>
 </template>
+
 
 <script lang="ts">
 import { defineComponent } from 'vue';
@@ -25,21 +28,21 @@ export default defineComponent({
   data() {
     return {
       isHovered: false,
-      buttonText: 'Reload Articles',
+      buttonText: 'Load Articles',
       articles: [] as Article[]
     };
   },
   mounted() {
-    this.fetchArticles();
+    // this.fetchArticles();
   },
   methods: {
     async fetchArticles() {
       this.articles = await ArticleService.getArticles();
-      console.log(this.articles);
     }
   }
 });
 </script>
+
 
 <style scoped>
 .btn {
@@ -59,9 +62,12 @@ export default defineComponent({
   margin-top: 20px;
 }
 
-.article {
+.article-container {
   width: 300px;
   margin: 20px;
+}
+
+.article {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
@@ -74,7 +80,8 @@ export default defineComponent({
 
 .article-image {
   width: 100%;
-  height: auto;
+  height: 200px;
+  object-fit: cover;
   border-radius: 5px;
   margin-bottom: 10px;
 }
@@ -89,7 +96,7 @@ export default defineComponent({
   font-size: 1rem;
   display: -webkit-box;
   -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 8px;
 }
@@ -115,5 +122,5 @@ a {
   text-decoration: none;
   margin-top: auto;
 }
-
 </style>
+
