@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Article } from '../interfaces/article';
 import store from '../store';
+import { useToast } from 'vue-toastification';
 
 export default class ArticleService {
   // private static apiUrl = 'http://localhost:8080/v1/articles/top-stories';
@@ -46,7 +47,8 @@ export default class ArticleService {
 
       return articles;
     } catch (error) {
-      console.error('Error fetching top headlines: ', error);
+      const toast = useToast();
+      toast.error("Error retrieving articles. Please try again later.");
       return [];
     }
   }

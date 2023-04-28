@@ -1,60 +1,60 @@
 <template>
-  <div class="article-list">
-    <div class="article-container" v-for="(article, index) in articles" :key="index">
-      <div class="article">
-        <img class="article-image" :src="article.urlToImage" />
-        <div class="article-published">{{ article.publishedAt }}</div>
-        <div class="article-title">{{ article.title }}</div>
-        <div class="article-description">{{ article.description }}</div>
-        <div class="article-author">{{ article.author }}</div>
-        <a :href="article.url" target="_blank" rel="noopener noreferrer">Read</a>
+  <div>
+    <div class="article-list">
+      <div class="article-container" v-for="(article, index) in articles" :key="index">
+        <div class="article">
+          <img class="article-image" :src="article.urlToImage" />
+          <div class="article-published">{{ article.publishedAt }}</div>
+          <div class="article-title">{{ article.title }}</div>
+          <div class="article-description">{{ article.description }}</div>
+          <div class="article-author">{{ article.author }}</div>
+          <a :href="article.url" target="_blank" rel="noopener noreferrer">Read</a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <button class="btn" @click="fetchArticles">
-    {{ buttonText }}
-  </button>
+    <div class="button-container">
+      <button class="btn" @click="fetchArticles">
+        {{ buttonText }}
+      </button>
+    </div>
+  </div>
 </template>
 
-
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, toDisplayString } from 'vue';
 import { Article } from '../interfaces/article';
 import ArticleService from '../services/article-service';
+import store from '../store';
+import { POSITION, useToast } from 'vue-toastification';
 
 export default defineComponent({
   name: 'VueButton',
   data() {
     return {
       isHovered: false,
-      buttonText: 'Load Articles',
-      articles: [] as Article[]
+      buttonText: 'Reload Articles',
+      articles: [] as Article[],
+      toast: useToast()
     };
   },
   mounted() {
-    // this.fetchArticles();
+    this.fetchArticles();
   },
   methods: {
     async fetchArticles() {
-      this.articles = await ArticleService.getArticles();
+      if (store?.getters?.getApiKey) {
+        this.articles = await ArticleService.getArticles();
+        this.toast.success("Articles loaded!");
+      } else {
+        this.toast.warning("No API key provided! Please enter one in 'Settings'.");
+      }
     }
   }
 });
 </script>
 
-
 <style scoped>
-.btn {
-  background-color: #41b883;
-  color: white;
-  margin-top: 20px;
-}
-
-.btn:hover {
-  background-color: #52c794;
-}
-
 .article-list {
   display: flex;
   flex-wrap: wrap;
@@ -116,11 +116,26 @@ export default defineComponent({
 a {
   display: inline-block;
   padding: 5px 10px;
-  background-color: #41b883;
+  background-color: #242424;
   color: #ffffff;
   border-radius: 5px;
   text-decoration: none;
   margin-top: auto;
 }
-</style>
 
+.button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.button-container .btn {
+  box-shadow: 0px 1px 0px 0px;
+  margin-right: 2%;
+}
+</style>

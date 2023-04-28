@@ -14,25 +14,21 @@
             <input type="text" id="api-key-input" v-model="form.apiKey" />
             <p v-if="!apiKeyIsValid" class="error-message">API Key is required.</p>
         </div>
-        <button :disabled="!formIsValid" type="submit" class="submit-button">Save</button>
+        <button :disabled="!formIsValid" type="submit">Save</button>
     </form>
 </template>
   
 <script lang="ts">
-import { defineComponent, ref, computed, SetupContext } from 'vue';
+import { defineComponent, ref, computed, SetupContext, Ref } from 'vue';
+import { useToast } from 'vue-toastification';
 import { useStore } from 'vuex';
 
 export default defineComponent({
     setup(props, { emit }: SetupContext) {
         const store = useStore();
+        const toast = useToast();
 
-        const form = ref({
-            selectedRegion: 'World',
-            selectedCountry: 'United States',
-            apiKey: '',
-        });
-
-        const englishSpeakingCountryCodes = ref({
+        const englishSpeakingCountryCodes: Ref<{ [key: string]: string }> = ref({
             AU: 'Australia',
             CA: 'Canada',
             GB: 'United Kingdom',
@@ -45,6 +41,11 @@ export default defineComponent({
             ZA: 'South Africa',
         });
 
+        const form = ref({
+            selectedRegion: 'World',
+            selectedCountry: englishSpeakingCountryCodes.value[store.getters.getSelectedCountryCode],
+            apiKey: store.getters.getApiKey,
+        });
         const selectedRegionIsValid = computed(() => {
             return !!form.value.selectedRegion;
         });
@@ -68,8 +69,9 @@ export default defineComponent({
                 )?.[0];
                 store.dispatch('updateSelectedCountryCode', countryKey);
                 store.dispatch('updateApiKey', form.value.apiKey);
+                toast.success('Settings saved!');
             } else {
-                console.error('Form is Invalid');
+                toast.error('Error saving settings');
             }
         };
 
@@ -105,11 +107,6 @@ export default defineComponent({
     flex-direction: row;
     gap: 0.5rem;
     align-items: center;
-}
-
-.submit-button {
-    background-color: #42b983;
-    color: #fff;
 }
 
 .error-message {
